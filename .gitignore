@@ -33,3 +33,22 @@
 
 .vs/
 Debug
+
+# dependencies
+gamebyReact/01firstGame/node_modules
+gamebyReact/01firstGame/npm-debug.log*
+gamebyReact/01firstGame/yarn-error.log
+gamebyReact/01firstGame/yarn.lock
+gamebyReact/01firstGame/package-lock.json
+
+# production
+gamebyReact/01firstGame/dist
+
+# misc
+.DS_Store
+
+# umi
+gamebyReact/01firstGame/src/.umi
+gamebyReact/01firstGame/src/.umi-production
+gamebyReact/01firstGame/src/.umi-test
+gamebyReact/01firstGame/.env.local
