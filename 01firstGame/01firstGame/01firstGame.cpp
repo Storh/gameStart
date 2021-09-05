@@ -2,7 +2,7 @@
 //
 //推箱子
 //固定地图+可以移动
-//可以判断游戏接受+重启游戏
+//可以判断游戏结束+重启游戏
 //自行设置地图长度+自动生成地图
 //自动生成的地图不一定有解
 //一关关的关卡+分数
@@ -154,6 +154,18 @@ void update(mapObject* state, char input, int width, int height) {
     }
 }
 
+bool gameCheck(mapObject* state, int width, int height) {
+    for (int i = 1; i <= width * height; i++) {
+        auto item = state[i];
+        if (item == mapBox) return false;
+    }
+    return true;
+}
+
+void reStartGame(mapObject* state, string map, int width, int height) {
+    init(state, map, width, height);
+}
+
 int main()
 {
     //设置地图的大小
@@ -164,11 +176,20 @@ int main()
     init(state, gameMap, mapWidth, mapHeight);
     while (1) {
         drow(state, mapWidth, mapHeight);
-        cout << "w ↑；a ←；s ↓；d →；" << endl;
+        cout << "w ↑；a ←；s ↓；d →；r 重启游戏" << endl;
         cin >> input;
-        update(state, input, mapWidth, mapHeight);
+        if (input == 'r')
+            reStartGame(state, gameMap, mapWidth, mapHeight);
+        else
+        {
+            update(state, input, mapWidth, mapHeight);
+            if (gameCheck(state, mapWidth, mapHeight)) {
+                cout << "Game win" << endl;
+                break;
+            }
+        }
+        
     }
-    std::cout << "Hello World!\n";
 }
 
 // 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单
