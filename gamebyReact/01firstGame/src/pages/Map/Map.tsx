@@ -7,3 +7,17 @@
 // 5.点击人物的时候，所以的格子都会熄灭，只留下可以抵达的格子为红色
 // 6.自动判定成功，所以要维护一个数组来保存箱子的位置，如果箱子抵达了那就自动成功。利用一个钩子或者类似于监听的东西，监听数组的改变
 // 7.事件 点击已经标红的 点击非红的 点击人物
+import MapNode from './components/MapNode';
+export default function MapPage() {
+  return (
+    <div>
+      <MapNode
+        state={true}
+        type={'mapBoxInGoal'}
+        id={1}
+        onClickSelected={(id: number) => console.log(id)}
+        onClickToSelect={(id: number) => console.log(id)}
+      />
+    </div>
+  );
+}

@@ -1,6 +1,6 @@
 // 每个node用来显示当前点的内容
 import React from 'react';
-import './MapNode/less';
+// import './MapNode/less';
 // 结点被点击有一个小特效
 // 人物被点击有一个小特效，并且展示能走向的格子（红框
 // 点击有红框的结点人物移动
@@ -8,11 +8,11 @@ import './MapNode/less';
 
 const frontArray = ['#', ' ', '.', 'o', 'O', 'p', 'P'];
 export type MapNodeProps = {
-  onClickPeople?: (value?: number) => void;
-  onClickSelected?: (value?: number) => void;
-  onClickToSelect?: (value?: number) => void;
+  onClickSelected;
+  onClickToSelect;
   state: boolean;
   type: string;
+  id: number;
 };
 const getFront = (state: string) => {
   // 地图的墙
@@ -35,20 +35,26 @@ const MapNode: React.FC<MapNodeProps> = (props) => {
   const {
     state, // 状态，是否需要显示红色（及被选择
     type, // 墙空地或者人箱子,需要一个全局对象来记录
-    onClickPeople,
     onClickSelected,
     onClickToSelect,
+    id,
   } = props;
   let mapMessage;
   if (state)
     mapMessage = (
-      <div style={{ width: '50px', height: '50px', color: 'rad' }}>
+      <div
+        style={{ width: '50px', height: '50px', background: '#999999' }}
+        onClick={() => onClickSelected(id)}
+      >
         {frontArray[getFront(type)]}
       </div>
     );
   else
     mapMessage = (
-      <div style={{ width: '50px', height: '50px' }}>
+      <div
+        style={{ width: '50px', height: '50px' }}
+        onClick={() => onClickToSelect(id)}
+      >
         {frontArray[getFront(type)]}
       </div>
     );
