@@ -8,8 +8,8 @@ import React from 'react';
 
 const frontArray = ['#', ' ', '.', 'o', 'O', 'p', 'P'];
 export type MapNodeProps = {
-  onClickSelected;
-  onClickToSelect;
+  onClickSelected: (id: number) => void;
+  onClickToSelect: (id: number) => void;
   state: boolean;
   type: string;
   id: number;

@@ -9,6 +9,7 @@
 // 7.事件 点击已经标红的 点击非红的 点击人物
 import MapNode from './components/MapNode';
 export default function MapPage() {
+  // 为了保证数据刷新，应该使用statehook来保存和修改数据
   return (
     <div>
       <MapNode
