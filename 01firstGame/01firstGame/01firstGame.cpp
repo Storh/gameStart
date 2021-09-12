@@ -3,14 +3,20 @@
 //推箱子
 //固定地图+可以移动
 //可以判断游戏结束+重启游戏
+
+//放弃
 //自行设置地图长度+自动生成地图
 //自动生成的地图不一定有解
+//（放弃，一般游戏的地图和设计，与其说自动生成，由专门的设计人员产出文件，然后程序读取才是更合理的做法，所以改为采用外部文件读取）
+
+//文件读取
 //一关关的关卡+分数
 
-//健壮性问题
+//健壮性问题(输入数据类型校验）
 
 #include <iostream>
 #include <string>
+#include <fstream>//文件
 #include <algorithm>
 using namespace std;
 
@@ -25,14 +31,6 @@ enum mapObject {
     mapPeopleInGoal,// 人到了目标点上的时候会有一点变化来表示站在目标点上
     unKnow// 当前为换行
 };
-
-//地图，#表示为墙，.为目标点，p为人，o为箱子
-string gameMap="\
-########\n\
-#  . .p#\n\
-#  o o #\n\
-#      #\n\
-########";
 
 void init(mapObject* state, string map, int width, int height) {
     mapObject t;//临时变量
@@ -168,8 +166,28 @@ void reStartGame(mapObject* state, string map, int width, int height) {
 
 int main()
 {
+
+
+    ifstream inputFile("./data/stageData.txt", ifstream::binary);//注意，win下回车会被认为两个字符 及\r\n 同时字符的行末需要有\r\n，不然每行字数不同会有问题
+    inputFile.seekg(0, ifstream::end);//移动到末尾
+    int fileSize = static_cast<int>(inputFile.tellg());//通过探针获取长度并利用static_cast，把结果转换为int类型
+    inputFile.seekg(0, ifstream::beg);
+    char* fileImage = new char[fileSize];
+    inputFile.read(fileImage, fileSize);
+
+    //cout.write(fileImage, fileSize);//检查读取情况
+    string gameMap = fileImage;//地图，#表示为墙，.为目标点，p为人，o为箱子
+
     //设置地图的大小
-    int mapWidth = 8, mapHeight = 5;
+    int mapWidth = 0, mapHeight = 0;//初始化数据
+    for (int i = 0; i < fileSize; i++) {
+        if (mapWidth == 0)//换行符不同的情况,同时因为会一直循环到结束，所以要排除已经有宽度的情况
+            if (gameMap[i] == '\n' || gameMap[i] == '\r')
+                mapWidth = i;
+        if (gameMap[i] == '\n')//不管那种换行符，都会有\n，同时，如果高度通过总数除以宽度，会导致因为换行符数目不同而行数错误的情况，所以通过统计\n的数量来实现
+            mapHeight++;
+    }
+
     //新建一个state用来存储地图
     mapObject* state = new mapObject[mapWidth * mapHeight];
     char input;
@@ -184,12 +202,14 @@ int main()
         {
             update(state, input, mapWidth, mapHeight);
             if (gameCheck(state, mapWidth, mapHeight)) {
+                drow(state, mapWidth, mapHeight);//游戏成功后不会再进入循环，所以要在这里额外显示一次
                 cout << "Game win" << endl;
                 break;
             }
         }
-        
+
     }
+    return 0;
 }
 
 // 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单
